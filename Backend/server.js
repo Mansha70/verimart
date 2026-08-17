@@ -28,9 +28,21 @@ const app = express();
 const FRONTEND_URL =
   process.env.FRONTEND_URL || "https://verimart-ft63.vercel.app";
 
+const ALLOWED_ORIGINS = [
+  FRONTEND_URL,
+  "https://verimart-qhji3rwr9-manshapandey2556-gmailcoms-projects.vercel.app",
+  "https://verimart-nub1driks-manshapandey2556-gmailcoms-projects.vercel.app",
+];
+
 app.use(
   cors({
-    origin: FRONTEND_URL,
+    origin: function (origin, callback) {
+      if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     credentials: true,
   })
