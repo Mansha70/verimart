@@ -42,4 +42,11 @@ app.use("/api/v1/conversation", convRouter);
 app.use("/api/v1/message", router);
 app.use("/api/v1/warning", warningRouter);
 
+if (process.env.NODE_ENV !== "production") {
+  const PORT = process.env.PORT || 4040;
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}
+
 export default app;
