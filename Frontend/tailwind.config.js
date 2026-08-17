@@ -1,0 +1,92 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  theme: {
+    extend: {
+      colors: {
+        ink: {
+          50: '#f6f7f9',
+          100: '#eceef2',
+          200: '#d5d9e2',
+          300: '#b0b8c9',
+          400: '#8590a8',
+          500: '#67738d',
+          600: '#525c73',
+          700: '#434b5e',
+          800: '#3a414f',
+          900: '#1f2430',
+          950: '#131720',
+        },
+        brand: {
+          50: '#eefdf5',
+          100: '#d6f9e7',
+          200: '#b0f1d0',
+          300: '#79e3b1',
+          400: '#3fcd8b',
+          500: '#16b36a',
+          600: '#099050',
+          700: '#087242',
+          800: '#0a5b37',
+          900: '#0a4b2f',
+          950: '#042a1a',
+        },
+        accent: {
+          50: '#eff8ff',
+          100: '#daedff',
+          200: '#bce0ff',
+          300: '#8dcdff',
+          400: '#56b0ff',
+          500: '#2f93fb',
+          600: '#1774ec',
+          700: '#125dd0',
+          800: '#154ca8',
+          900: '#164386',
+          950: '#102b55',
+        },
+        gold: {
+          50: '#fefbe8',
+          100: '#fdf6c3',
+          200: '#fbeb8a',
+          300: '#f7d94f',
+          400: '#f2c027',
+          500: '#e8a00d',
+          600: '#cf7d07',
+          700: '#ac5a09',
+          800: '#8c4710',
+          900: '#753b12',
+        },
+      },
+      fontFamily: {
+        sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+        display: ['"Sora"', 'system-ui', 'sans-serif'],
+      },
+      boxShadow: {
+        card: '0 1px 2px rgba(16,23,40,0.06), 0 8px 24px -12px rgba(16,23,40,0.12)',
+        soft: '0 2px 12px -2px rgba(16,23,40,0.08)',
+        ring: '0 0 0 3px rgba(22,179,106,0.18)',
+      },
+      borderRadius: {
+        '2xl': '1.25rem',
+        '3xl': '1.75rem',
+      },
+      keyframes: {
+        'fade-in': { from: { opacity: 0 }, to: { opacity: 1 } },
+        'slide-up': {
+          from: { opacity: 0, transform: 'translateY(8px)' },
+          to: { opacity: 1, transform: 'translateY(0)' },
+        },
+        'pulse-ring': {
+          '0%': { boxShadow: '0 0 0 0 rgba(22,179,106,0.35)' },
+          '70%': { boxShadow: '0 0 0 8px rgba(22,179,106,0)' },
+          '100%': { boxShadow: '0 0 0 0 rgba(22,179,106,0)' },
+        },
+      },
+      animation: {
+        'fade-in': 'fade-in 0.3s ease-out',
+        'slide-up': 'slide-up 0.35s cubic-bezier(0.22,1,0.36,1)',
+        'pulse-ring': 'pulse-ring 1.8s ease-out infinite',
+      },
+    },
+  },
+  plugins: [],
+};

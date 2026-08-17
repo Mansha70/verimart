@@ -1,0 +1,69 @@
+import mongoose from "mongoose"
+
+const transactionSchema=new mongoose.Schema({
+    product:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Product",
+        required:true
+    },
+    buyer:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User",
+        required:true
+    },
+    seller:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User",
+        required:true
+    },
+    agreedPrice:{
+        type:Number,
+        default:1
+    },
+    meeting:{
+        type:String,
+        default:""
+    },
+    date:{
+        type:Date
+    },
+    time:{
+        type:String,
+        default:"",
+    },
+    status:{
+        type:String,
+         enum: [
+        "REQUESTED",
+        "ACCEPTED",
+        "REJECTED",
+        "MEETING_SCHEDULED",
+        "COMPLETED",
+        "CANCELLED"
+      ],
+      default: "REQUESTED",
+    },
+    buyerConfirmed:{
+        type:Boolean,
+        required:true
+    },
+    sellerConfirmed:{
+        type:Boolean,
+        required:true
+    },
+paymentMethod:{
+        type:String,
+        enum:["cash","upi","Card"],
+        default:"Cash"
+    },
+    conversation_id:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Conversation",
+        default:null
+    }
+},
+{
+    timestamps:true
+}
+)
+export default mongoose.model("Transaction",transactionSchema)
