@@ -1,6 +1,10 @@
 import dotenv from "dotenv";
+
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config();
+}
+
 import express from "express";
-import mongoose from "mongoose";
 import cors from "cors";
 import methodOverride from "method-override";
 
@@ -14,26 +18,16 @@ import router from "./routes/messageRoute.js";
 import convRouter from "./routes/conversation.route.js";
 import warningRouter from "./routes/warning.route.js";
 
-if (process.env.NODE_ENV !== "production") {
-  dotenv.config();
-}
-
 const app = express();
 
-app.use(cors());
-app.options("*", cors());
+app.use(cors({
+  origin: "https://verimart-frontend.vercel.app",
+  credentials: true
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
-
-const MONGO_URL = process.env.MONGO_URL;
-if (MONGO_URL) {
-  mongoose.connect(MONGO_URL)
-    .then(() => console.log("MongoDB connected"))
-    .catch((err) => console.error("MongoDB connection error:", err));
-} else {
-  console.warn("MONGO_URL not set — skipping MongoDB connection");
-}
 
 app.get("/", (req, res) => {
   res.status(200).json({
@@ -54,6 +48,7 @@ app.use("/api/v1/warning", warningRouter);
 
 if (process.env.NODE_ENV !== "production") {
   const PORT = process.env.PORT || 4040;
+
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
