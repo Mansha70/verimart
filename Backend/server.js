@@ -62,3 +62,7 @@ const port = process.env.PORT || 4040
     console.error('Database connection error:', err)
     process.exit(1)
   })
+
+  app.get("/", (req, res) => {
+  res.send("Verimart Backend is running 🚀");
+});
