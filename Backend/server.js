@@ -26,10 +26,11 @@ const app = express();
 // =========================
 
 const FRONTEND_URL =
-  process.env.FRONTEND_URL || "https://verimart-ft63.vercel.app";
+  process.env.FRONTEND_URL || "https://verimart-frontend.vercel.app";
 
 const ALLOWED_ORIGINS = [
   FRONTEND_URL,
+  "https://verimart-pearl.vercel.app",
   "https://verimart-qhji3rwr9-manshapandey2556-gmailcoms-projects.vercel.app",
   "https://verimart-nub1driks-manshapandey2556-gmailcoms-projects.vercel.app",
 ];

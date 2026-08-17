@@ -1,4 +1,4 @@
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL as string) || 'https://verimart-qhji3rwr9-manshapandey2556-gmailcoms-projects.vercel.app/api/v1';
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL as string) || 'https://verimart-pearl.vercel.app/api/v1';
 const TOKEN_KEY = 'verimart_token';
 const USER_KEY = 'verimart_user';
 
