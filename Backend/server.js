@@ -5,6 +5,7 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 import express from "express";
+import mongoose from "mongoose";
 import cors from "cors";
 import methodOverride from "method-override";
 
@@ -20,14 +21,36 @@ import warningRouter from "./routes/warning.route.js";
 
 const app = express();
 
+const FRONTEND_URL = process.env.FRONTEND_URL || "https://verimart-frontend.vercel.app";
+const ALLOWED_ORIGINS = [
+  FRONTEND_URL,
+  "https://verimart-nub1driks-manshapandey2556-gmailcoms-projects.vercel.app"
+];
+
 app.use(cors({
-  origin: "https://verimart-frontend.vercel.app",
+  origin: function (origin, callback) {
+    if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true
 }));
+app.options("*", cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
+
+const MONGO_URL = process.env.MONGO_URL;
+if (MONGO_URL) {
+  mongoose.connect(MONGO_URL)
+    .then(() => console.log("MongoDB connected"))
+    .catch((err) => console.error("MongoDB connection error:", err));
+} else {
+  console.warn("MONGO_URL not set — skipping MongoDB connection");
+}
 
 app.get("/", (req, res) => {
   res.status(200).json({
