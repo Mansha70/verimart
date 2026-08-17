@@ -21,42 +21,62 @@ import warningRouter from "./routes/warning.route.js";
 
 const app = express();
 
-const FRONTEND_URL = process.env.FRONTEND_URL || "https://verimart-frontend.vercel.app";
-const ALLOWED_ORIGINS = [
-  FRONTEND_URL,
-  "https://verimart-nub1driks-manshapandey2556-gmailcoms-projects.vercel.app"
-];
+// =========================
+// CORS
+// =========================
 
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || ALLOWED_ORIGINS.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true
-}));
+const FRONTEND_URL =
+  process.env.FRONTEND_URL || "https://verimart-ft63.vercel.app";
+
+app.use(
+  cors({
+    origin: FRONTEND_URL,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    credentials: true,
+  })
+);
+
+// =========================
+// MIDDLEWARE
+// =========================
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
+// =========================
+// DATABASE
+// =========================
+
 const MONGO_URL = process.env.MONGO_URL;
-if (MONGO_URL) {
-  mongoose.connect(MONGO_URL)
-    .then(() => console.log("MongoDB connected"))
-    .catch((err) => console.error("MongoDB connection error:", err));
+
+if (!MONGO_URL) {
+  console.error("MONGO_URL is not defined");
 } else {
-  console.warn("MONGO_URL not set — skipping MongoDB connection");
+  mongoose
+    .connect(MONGO_URL)
+    .then(() => {
+      console.log("MongoDB connected successfully");
+    })
+    .catch((err) => {
+      console.error("MongoDB connection error:", err);
+    });
 }
+
+// =========================
+// HEALTH CHECK
+// =========================
 
 app.get("/", (req, res) => {
   res.status(200).json({
     success: true,
-    message: "Verimart Backend is running 🚀"
+    message: "Verimart Backend is running 🚀",
   });
 });
+
+// =========================
+// ROUTES
+// =========================
 
 app.use("/api/v1", authRouter);
 app.use("/api/v1/product", productRoute);
@@ -67,6 +87,10 @@ app.use("/api/v1/notification", NotificationRouter);
 app.use("/api/v1/conversation", convRouter);
 app.use("/api/v1/message", router);
 app.use("/api/v1/warning", warningRouter);
+
+// =========================
+// LOCAL SERVER
+// =========================
 
 if (process.env.NODE_ENV !== "production") {
   const PORT = process.env.PORT || 4040;
