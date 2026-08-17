@@ -26,9 +26,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
-mongoose.connect(process.env.MONGO_URL || "")
-  .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.error("MongoDB connection error:", err));
+const MONGO_URL = process.env.MONGO_URL;
+if (MONGO_URL) {
+  mongoose.connect(MONGO_URL)
+    .then(() => console.log("MongoDB connected"))
+    .catch((err) => console.error("MongoDB connection error:", err));
+} else {
+  console.warn("MONGO_URL not set — skipping MongoDB connection");
+}
 
 app.get("/", (req, res) => {
   res.status(200).json({

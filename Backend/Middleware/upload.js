@@ -4,9 +4,11 @@ import fs from "fs"
 import { fileURLToPath } from "url"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const uploadDir = path.join(__dirname, "..", "uploads", "products")
 
-// Ensure the uploads/products directory exists
+const isVercel = process.env.VERCEL === "1"
+const baseDir = isVercel ? "/tmp" : __dirname
+const uploadDir = path.join(baseDir, "uploads", "products")
+
 fs.mkdirSync(uploadDir, { recursive: true })
 
 // Local disk storage so images are stored on the server and served statically.
