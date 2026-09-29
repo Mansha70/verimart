@@ -1,6 +1,19 @@
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import User from "../Models/User.js"
+import { v2 as cloudinary } from "cloudinary"
+import dotenv from "dotenv"
+import fs from "fs"
+
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config();
+}
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+})
 const register=async(req,res)=>{
     try{
         let {name,email,password,profilePic,phone,role,trustScore,verification,warningCount,accountStatus,successfulSales,successfulPurchase}=req.body
@@ -120,8 +133,23 @@ const updateProfile = async (req, res) => {
 
         // Handle profile picture upload (if any)
         if (req.file) {
+          if (process.env.CLOUD_NAME && process.env.API_KEY && process.env.API_SECRET) {
+            const buffer = req.file.buffer || fs.readFileSync(req.file.path);
+            const result = await new Promise((resolve, reject) => {
+              const stream = cloudinary.uploader.upload_stream(
+                { folder: "verimart/profiles", resource_type: "auto" },
+                (error, result) => {
+                  if (error) reject(error);
+                  else resolve(result);
+                }
+              );
+              stream.end(buffer);
+            });
+            updateData.profilePic = result.secure_url;
+          } else {
             const relative = req.file.path.split("uploads").pop().replace(/\\/g, "/");
             updateData.profilePic = `/uploads${relative}`;
+          }
         }
 
         // Only allow updating fields that were actually provided
